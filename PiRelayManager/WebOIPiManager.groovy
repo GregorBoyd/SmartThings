@@ -312,8 +312,8 @@ def switchChange(evt){
     
     def parts = evt.value.tokenize('.');
     def deviceId = parts[1];
-    def GPIO = parts[5];
-    def state = parts[6];
+    def GPIO = parts[6];
+    def state = parts[7];
     
     log.debug state;
     
