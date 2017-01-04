@@ -20,7 +20,6 @@
 	5) Paste in the code from here, into SmartThings
 	6) Click 'Create'
 	7) Click 'Publish -> For Me'
-
  * 
  */
 definition(
@@ -40,6 +39,8 @@ preferences {
   	input "piIP", "text", "title": "Raspberry Pi IP", multiple: false, required: true
     input "piPort", "text", "title": "Raspberry Pi Port", multiple: false, required: true
     input "theHub", "hub", title: "On which hub?", multiple: false, required: true
+    input "piUser","text", "title": "User", multiple: false, required: false
+    input "piPsswd","text", "title": "Password", multiple: false, required: false
   }
   
     section("Device 1") {    
@@ -342,11 +343,14 @@ def setDeviceState(gpio, state) {
 }
 
 def executeRequest(Path, method, setGPIODirection, gpioPin) {
-		   
-	log.debug "The " + method + " path is: " + Path;
-	    
+       
+    log.debug "The " + method + " path is: " + Path;
+    
     def headers = [:] 
     headers.put("HOST", "$settings.piIP:$settings.piPort")
+    def decoded="$settings.piUser:$settings.piPsswd"
+    def encoded = "Basic "+decoded.bytes.encodeBase64()  
+    headers.put("Authorization",encoded)
     
     try {    	
         
@@ -390,4 +394,3 @@ private String convertPortToHex(port) {
     //log.debug hexport
     return hexport
 }
- 
